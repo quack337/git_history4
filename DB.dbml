@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="git_history4" Class="DBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=172.30.1.50;Initial Catalog=git_history4;Persist Security Info=True;User ID=user1;Trust Server Certificate=True" SettingsObjectName="git_history4.Properties.Settings" SettingsPropertyName="git_history4ConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.제외할파일" Member="제외할파일">
+    <Type Name="제외할파일">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="패턴" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="유형" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Author" Member="Author">
+    <Type Name="Author">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="계정" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="이메일" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="학번" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="이름" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Author_Commit" Member="Commit" ThisKey="id" OtherKey="authorId" Type="Commit" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[Commit]" Member="Commit">
+    <Type Name="Commit">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="projectId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="commitNo" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="authorId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="시각" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="메모" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="merge1" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="merge2" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="다운로드시각" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="branch" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Commit_Commit날짜수정" Member="Commit날짜수정" ThisKey="id" OtherKey="commitId" Type="Commit날짜수정" />
+      <Association Name="Commit_Numstat" Member="Numstat" ThisKey="id" OtherKey="commitId" Type="Numstat" />
+      <Association Name="Author_Commit" Member="Author" ThisKey="authorId" OtherKey="id" Type="Author" IsForeignKey="true" />
+      <Association Name="Project_Commit" Member="Project" ThisKey="projectId" OtherKey="id" Type="Project" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Commit날짜수정" Member="Commit날짜수정">
+    <Type Name="Commit날짜수정">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="commitId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="이전시각" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="새시각" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Commit_Commit날짜수정" Member="Commit" ThisKey="commitId" OtherKey="id" Type="Commit" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Numstat" Member="Numstat">
+    <Type Name="Numstat">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="commitId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="sourceFileId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="추가된줄수" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="삭제된줄수" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Commit_Numstat" Member="Commit" ThisKey="commitId" OtherKey="id" Type="Commit" IsForeignKey="true" />
+      <Association Name="SourceFile_Numstat" Member="SourceFile" ThisKey="sourceFileId" OtherKey="id" Type="SourceFile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Project" Member="Project">
+    <Type Name="Project">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="url" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="path" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="기타" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="Project_Commit" Member="Commit" ThisKey="id" OtherKey="projectId" Type="Commit" />
+      <Association Name="Project_SourceFile" Member="SourceFile" ThisKey="id" OtherKey="projectId" Type="SourceFile" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SourceFile" Member="SourceFile">
+    <Type Name="SourceFile">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="projectId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="경로명" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="가중치" Type="System.Single" DbType="Real NOT NULL" CanBeNull="false" />
+      <Column Name="종류" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="이진파일" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="이전경로명" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="라인수" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="스터디자료" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="branch" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="제외" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="SourceFile_Numstat" Member="Numstat" ThisKey="id" OtherKey="sourceFileId" Type="Numstat" />
+      <Association Name="Project_SourceFile" Member="Project" ThisKey="projectId" OtherKey="id" Type="Project" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.가중치설정" Member="가중치설정">
+    <Type Name="가중치설정">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="종류" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="값" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="가중치" Type="System.Single" DbType="Real NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.설정" Member="설정">
+    <Type Name="설정">
+      <Column Name="키" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="값" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Function Name="dbo.프로젝트내용지우기" Method="프로젝트내용지우기">
+    <Parameter Name="projectId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

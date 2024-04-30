@@ -1,0 +1,21 @@
+﻿
+update SourceFile
+set 제외 = 1
+where 제외 = 0 and
+(경로명 like '.idea%'
+or 경로명 like '.gradle%'
+or 경로명 like '.yarn%' 
+or 경로명 like '.vscode%'
+or 경로명 like '.eslint%'
+or 경로명 like 'gradlew%'
+or 경로명 like 'build.gradle%' 
+or 경로명 like 'settings.gradle%'
+or 경로명 like '%.jar' 
+or 경로명 like '%.class'
+or 경로명 like '%package-lock.json' 
+or 경로명 like '%project.pbxproj' 
+or 경로명 like '%Gemfile.lock' 
+or 경로명 like '%.gitignore' 
+or 경로명 like '%.githooks%' 
+)
+
